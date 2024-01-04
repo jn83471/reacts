@@ -10,6 +10,10 @@ import { ForgePassword } from './pages/ForgePassword'
 import { NewPassword } from './pages/NewPassword'
 import { ConfirmAccount } from './pages/ConfirmAccount'
 import { AuthProvider } from './context/AuthProvider'
+import { ProyectsProvider } from './context/ProyectsProvider'
+import { Proyects } from './pages/Proyects'
+import { ProtectedRoutes } from './layouts/ProtectedRoutes'
+import { AddProyects } from './pages/AddProyects'
 
 
 function App() {
@@ -18,15 +22,23 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route path='/' element={<AuthLayout />} >
-            <Route index element={<Login />} />
-            <Route path='register' element={<Register />} />
-            <Route path='forget' element={<ForgePassword />} />
-            <Route path='forget/:token' element={<NewPassword />} />
-            <Route path='confirmAccount/:id' element={<ConfirmAccount />} />
-          </Route>
-        </Routes>
+        <ProyectsProvider>
+          <Routes>
+            <Route path='/' element={<AuthLayout />} >
+              <Route index element={<Login />} />
+              <Route path='register' element={<Register />} />
+              <Route path='forget' element={<ForgePassword />} />
+              <Route path='forget/:token' element={<NewPassword />} />
+              <Route path='confirmAccount/:id' element={<ConfirmAccount />} />
+            </Route>
+
+            <Route path='/proyects' element={<ProtectedRoutes />}>
+              <Route index element={<Proyects />} />
+              <Route path='AddProyects' element={<AddProyects />} />
+            </Route>
+
+          </Routes>
+        </ProyectsProvider>
       </AuthProvider>
     </BrowserRouter>
   )

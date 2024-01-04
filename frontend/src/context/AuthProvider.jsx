@@ -1,11 +1,15 @@
 import { createContext, useEffect, useState } from "react";
 import ClientAxios from "../config/ClientAxios";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext()
 
 const AuthProvider=({children})=>{
 
     const [auth,SetAuth] = useState({})
+    const [load,SetLoad]=useState(true);
+
+    const Navigate= useNavigate()
 
 
     useEffect(()=>{
@@ -13,12 +17,26 @@ const AuthProvider=({children})=>{
         
         const AutenticateUser=async ()=>{
             if(!token){
+                SetLoad(false)
+                Navigate("/proyects")
                 return 
             }
             try {
-                const user=await ClientAxios('/users/profile')
-            } catch (error) {
+                const config={
+                    headers:{
+                        "Content-Type":"application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+                const {data}=await ClientAxios('/users/profile',config)
+                console.log(data);
+                SetAuth(data)
+                SetLoad(false)
                 
+            } catch (error) {
+                SetAuth({})
+                SetLoad(false)
+                Navigate("/proyects")
             }
         }
         AutenticateUser();
@@ -26,7 +44,9 @@ const AuthProvider=({children})=>{
 
     return(<AuthContext.Provider
     value={{
-        SetAuth
+        auth
+        ,load
+        ,SetAuth
     }}>
         {children}
     </AuthContext.Provider>)
