@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom"
 import { useAuth } from "../hook/useAuth";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
