@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import ClientAxios from "../config/ClientAxios";
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -6,7 +6,8 @@ const ProyectsContext=createContext()
 
 const ProyectsProvider=({children})=>{
     const [proyects,SetProyects]=useState([])
-    const [Alert,SetAlert]=useState([])
+    const [proyect,SetProyect]=useState({})
+    const [Alert,SetAlert]=useState({})
 
 
     const Navigate=useNavigate();
@@ -30,7 +31,7 @@ const ProyectsProvider=({children})=>{
             }
             const {data}=await ClientAxios.post("/proyects",proyect,config)
             SetAlert({msg:"Proyecto creado correctamente",error:false})
-
+            SetProyects([...proyects,data])
             setTimeout(() => {
                 SetAlert({})
                 Navigate("/proyects")
@@ -40,7 +41,45 @@ const ProyectsProvider=({children})=>{
         }
     }
 
-    return <ProyectsContext.Provider value={{proyects,Alert,ShowAlert,CreateProyect}}>
+    const GetProyects=async ()=>{
+        try {
+            const token=localStorage.getItem("token")
+            if(!token) return
+            const config={
+                headers: {
+                    "Content-Type":"application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+            const {data}=await ClientAxios.get("/proyects",config)
+            SetProyects(data)
+        } catch (error) {
+            
+        }
+    }
+
+    const GetProyectsByid=async (id)=>{
+        try {
+            const token=localStorage.getItem("token")
+            if(!token) return
+            const config={
+                headers: {
+                    "Content-Type":"application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+            const {data}=await ClientAxios.get(`/proyects/${id}`,config)
+            SetProyect(data)
+        } catch (error) {
+            
+        }
+    }
+
+    useEffect(()=>{
+        GetProyects()
+    },[])
+
+    return <ProyectsContext.Provider value={{proyects,Alert,ShowAlert,CreateProyect,proyect,GetProyectsByid}}>
         {children}
     </ProyectsContext.Provider>
 }

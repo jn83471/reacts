@@ -14,6 +14,7 @@ import { ProyectsProvider } from './context/ProyectsProvider'
 import { Proyects } from './pages/Proyects'
 import { ProtectedRoutes } from './layouts/ProtectedRoutes'
 import { AddProyects } from './pages/AddProyects'
+import { Proyect } from './pages/Proyect'
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
             <Route path='/proyects' element={<ProtectedRoutes />}>
               <Route index element={<Proyects />} />
               <Route path='AddProyects' element={<AddProyects />} />
+              <Route path=':id' element={<Proyect />} />
             </Route>
 
           </Routes>

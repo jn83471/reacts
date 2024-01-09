@@ -26,12 +26,12 @@ const GetProyect=async(req,res)=>{
         return res.status(401).json({msg:"Accion no valida"})
     }
 
-    const Task =await Tasks.find().where('Owner').equals(proyects._id)
-    console.log(Task)
-    return res.json({
-        proyects,
-        Task
-    });
+    //const Task =await Tasks.find().where('Owner').equals(proyects._id)
+    //console.log(Task)
+    return res.json(
+        proyects
+        //Task
+    );
     
 }
 const UpdateProyect=async (req,res)=>{

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { AlertComponent } from "../components/AlertComponent"
 import ClientAxios from "../config/ClientAxios"
 import { useAuth } from "../hook/useAuth"
@@ -13,6 +13,8 @@ export const Login = () => {
 
   const [Alert, SetAlert] = useState("");
   const { msg } = Alert
+  
+  const Navigate=useNavigate()
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
@@ -33,6 +35,7 @@ export const Login = () => {
       localStorage.setItem("token",data.token)
       SetAlert({})
       SetAuth(data)
+      Navigate("/proyects")
     } catch (error) {
       SetAlert({msg:error.response.data.msg,error:true})
     }
